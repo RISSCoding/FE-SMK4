@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const groceryItems = [
   {
     id: 1,
@@ -42,18 +44,27 @@ function Footer(){
 }
 
 function Form (){
+  function handleSubmit (e){
+    const [name, setName] = useState('');
+    
+    e.preventDefault();
+    alert(name);
+  }
+
+  const quantityNum = [...Array(99)].map((_, i) =>(
+    <option value={i + 1} key={i + 1}>
+      {i + 1}
+      </option>
+  ));
+
   return (
-    <form className="add-form">
+    <form className="add-form" onSubmit={handleSubmit}>
     <h3>Hari ini belanja apa kita?</h3>
     <div>
       <select>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
+        {quantityNum}
       </select>
-      <input type="text" placeholder="nama barang..." />
+      <input type="text" placeholder="nama barang..." value={name} onChange={(e) => setName(e.target.value)}/>
     </div>
     <button>Tambah</button>
   </form>
@@ -67,13 +78,7 @@ function GroceryList (){
     <ul>
     {
     groceryItems.map((item) => (
-        <li key={item.id}>
-        <input type="checkbox" checked={item.checked}/>
-        <span style={item.checked ? { textDecoration: "line-through" } : {}}> 
-          {item.quantity} {item.name} 
-        </span>
-        <button>&times;</button>
-        </li>
+      <Item item={item} key={item.id} />
         )
     )
 }
@@ -88,5 +93,17 @@ function GroceryList (){
     <button>Bersihkan Daftar</button>
   </div>
   </>
+  );
+}
+
+function Item ({item}){
+  return(
+    <li key={item.id}>
+    <input type="checkbox" />
+    <span style={item.checked ? { textDecoration: "line-through" } : {}}> 
+      {item.quantity} {item.name} 
+    </span>
+    <button>&times;</button>
+    </li>
   );
 }
